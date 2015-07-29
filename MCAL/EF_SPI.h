@@ -51,6 +51,22 @@ void EF_SpiInit(U8_t DeviceType);
 **********************************************************************/
 U8_t EF_SpiTransfer(U8_t data);
 
+
+/*********************************************************************
+* Function    : U8_t EF_void_SPI_TransferArray(U8_t data);
+*
+* DESCRIPTION : This function used to Transfer Data array through SPI bus
+*
+* PARAMETERS  : DataOut  pointer to Data user need to transmit.
+* 				DataIn   pointer to received Data during transmitting
+* 				Data_Length
+*
+*
+* Return Value: Data User received
+**********************************************************************/
+void EF_void_SPI_TransferArray(U8_t * DataOut, U8_t * DataIn, U8_t Data_Length);
+
+
 /*********************************************************************
 * Function    : U8_t EF_BOOLEAN_SpiTransfer(U8_t * returnedValue);
 *

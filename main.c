@@ -219,6 +219,57 @@ int main (void)
 
 		}
 
+
+
+
+		ISR (USART_RXC_vect)
+		{
+			 static volatile U8_t RX_data = 0;
+
+			 RX_data = UDR;
+			 if ((RX_data != '\r') && (RX_data != '\n'))
+			 {
+				 if (gSmsReadyFlag == 1)
+				 {
+					 if (gNumberOfPunctuation == 6)
+					 {
+						 gRX_SMS[counter] = RX_data;
+						 //TODO modify this check.
+						 if ( gRX_SMS[counter] == 'K' && gRX_SMS[counter-1] == 'O')
+						 {
+							 gNumberOfRxBytes   = counter-1;
+							 counter=0;
+							 gSmsReadyFlag     = 0;
+							 gSecondTimeEntery = 0;
+						 }
+						 counter++;
+					 }
+					 else
+					 {
+						 if (RX_data == '\"')
+						 {
+							 gNumberOfPunctuation++;
+						 }
+
+					 }
+				 }
+				 else
+				 {
+					 EF_void_LCD_send_data (RX_data);
+					 if (RX_data == 'K')
+					 {
+						 EF_void_LCD_send_data (' ');
+					 }
+				 }
+
+			 }
+
+
+		}
+
+
+
+
 #endif
 
 #ifdef SKYLAB_GPS
@@ -352,8 +403,132 @@ ISR (USART_RXC_vect)
 }
 
 #endif
+
+#ifdef nRF2401_RX_MAIN
+
+UART_cfg_str Uart_Paramters = {4800, 8, ONE_STOP_BIT, NO_PARITY,0,0,1,1};
+U8_t  data_arr[5];
+U8_t data_test;
+U8_t RX_Buffer [10][33];
+U8_t CRC_Rx =1;
+volatile U8_t counter =0 , iterator = 0;
+
+int main()
+{
+	DDRD |= (1<<7)|(1<<6);
+	PORTD |= 1<<7;
+	_delay_ms(1000);
+
+
+	EF_void_UART_Init(&Uart_Paramters);
+	EF_void_UART_SendArray((U8_t*)"eee",3);
+
+//	EF_void_SPI_Init(SLAVE_TYPE);
 //
-//	/*UART Initialization*/
-//	static UART_cfg_str  uart_cfg = {9600,8,ONE_STOP_BIT,NO_PARITY,FALSE,FALSE,TRUE,TRUE};
-//	void_UART_init(&uart_cfg);
-//	void_ADC_init();
+//
+//	while (1)
+//	{
+//		EF_u8_SPI_TransferByte(0xEF);
+//	}
+	EF_void_nRF_init();
+	EF_BOOLEAN_nRF_RXSetup();
+
+//	_delay_ms(1);
+
+	while(1)
+	{
+//		EF_BOOLEAN_nRF_RXSetup();
+//		_delay_ms(1);
+
+		for (iterator = 0 ; iterator <3 ; iterator++)
+		{
+			EF_BOOLEAN_nRF_GetData(&(RX_Buffer[iterator][0]), 32 );
+			PORTD ^= 1<<7;
+		}
+
+		CRC_Rx = 1;
+		for (iterator = 0 ; iterator <3 ; iterator++)
+		{
+			for (counter = 0 ; counter <31 ; counter++)
+			{
+				CRC_Rx = (CRC_Rx) ^ (RX_Buffer[iterator][counter]) ^
+						  	  	    (RX_Buffer[iterator][counter+1]);
+			}
+		}
+//		EF_BOOLEAN_nRF_GetData ((U8_t*)data_arr , 3);
+//		EF_void_UART_SendArray ((U8_t*)data_arr , 3);
+//		data_test = EF_u8_nRF_ReadRegister (0x17);
+		EF_void_UART_HextoASCII (&CRC_Rx);
+		EF_void_UART_PutChar(' ');
+//		data_test = EF_u8_nRF_ReadRegister (0x7);
+//		EF_void_UART_HextoASCII (&data_test);
+//		EF_void_UART_PutChar('-');
+//		_delay_ms(100);
+//		PORTD ^= 1<<7;
+//
+//		PORTB &= ~(1<<3);
+//		_delay_ms(1);
+	}
+
+
+
+	return 0;
+}
+#endif
+
+#ifdef nRF_2401_TX_MAIN
+
+#define F_CPU 1000000UL
+#include <util/delay.h>
+
+UART_cfg_str Uart_Paramters = {4800, 8, ONE_STOP_BIT, NO_PARITY,0,0,1,1};
+U8_t  data_arr[3] ={0};
+U8_t  data_test =0;
+ U8_t CRC_Tx =1;
+volatile U8_t counter =0 , iterator = 0;
+static U8_t Large_array[10][33] = {"0123456789 0123456789 0123456789",
+								   "0123455555 0123456789 0123456789",
+								   "0123456789 0123444444 0123456789"};
+
+#define LOW_CSN    	     		SPI_PORT &= ~(1<<SS_BIT)
+#define HIGH_CSN    	 		SPI_PORT |=  (1<<SS_BIT)
+
+int main()
+{
+	DDRD |= 1<<7|1<<6;
+
+	EF_void_UART_Init(&Uart_Paramters);
+
+	EF_void_nRF_init();
+
+	EF_void_nRF_TXSetup();
+	for (iterator = 0 ; iterator <3 ; iterator++)
+	{
+		for (counter = 0 ; counter <31 ; counter++)
+		{
+			CRC_Tx = (CRC_Tx) ^ (Large_array[iterator][counter]) ^
+					  	  	    (Large_array[iterator][counter+1]);
+		}
+	}
+
+	while(1)
+	{
+
+//		EF_void_UART_HextoASCII ((U8_t*)&CRC_Tx);
+		counter = 0;
+		for (iterator = 0 ; iterator <3 ; iterator++)
+		{
+			EF_BOOLEAN_nRF_SendData(&(Large_array[iterator][0]), 32 );
+			_delay_ms(100);
+			PORTD ^= 1<<7;
+		}
+//		_delay_ms(1000);
+//		_delay_ms(1000);
+//		PORTD ^= 1<<7;
+	}
+
+
+
+	return 0;
+}
+#endif

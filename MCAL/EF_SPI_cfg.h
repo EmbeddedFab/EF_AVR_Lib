@@ -36,7 +36,7 @@
 #define SLAVE_TYPE        0
 
 #define SPI_DDR			  DDRB
-
+#define SPI_PORT	      PORTB
 #define MISO_BIT          6
 #define MOSI_BIT          5
 #define SCK_BIT           7

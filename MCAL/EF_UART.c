@@ -28,7 +28,7 @@
 #include "EF_UART.h"
 #include "EF_SpechialTIMER.h"
 #include "../ServiceLayer/std_types.h"
-#include "../HAL/EF_LCD.h"
+//#include "../HAL/EF_LCD.h"
 #include <util/delay.h>
 
 /**************************************************
@@ -89,7 +89,6 @@ void EF_void_UART_Init(UART_cfg_str *uart_cfg)
 	/* using Special Timer to able some UART Function to be unstuck */
 	EF_void_TimerCreate(UART_TIMER_ID, UART_WAIT_TIME);
 }
-
 /****************************************************************************
 * Function    : EF_BOOLEAN_UART_GetChar
 *
@@ -211,4 +210,42 @@ void EF_void_UART_SendArray(U8_t *array, U8_t Length)
     	EF_void_UART_PutChar(array[ArrayIndex]);
 	}
 }
+
+
+
+
+void EF_void_UART_HextoASCII(U8_t *hex)
+{
+
+	U8_t temp_L = 0;                    // dummy variable that will hold LSBs of Hex number
+	U8_t temp_H = 0;                    // dummy variable that will hold MSBs of Hex number
+
+	temp_H = *hex & 0xF0;           // Obtain the upper 4 bits (MSBs) of hex number
+	temp_H = temp_H >> 4;           //
+
+	if(temp_H >9)                   // Check if the number is a letter
+	{
+		temp_H += 0x37;             // Convert the number to a letter in ASCII
+	}
+	else
+	{
+		temp_H += 0x30;             // Convert the number to ASCII number
+	}
+
+	EF_void_UART_PutChar(temp_H);           // Display the number
+
+	temp_L = *hex & 0x0F;           // Obtain the lower 4 bits (LSBs) of hex number
+
+	if(temp_L >9)                   // Check if the the number is a letter
+	{
+		temp_L += 0x37;             // Convert the number to a letter in ASCII
+	}
+	else
+	{
+		temp_L += 0x30;             // Convert the number to ASCII number
+	}
+
+	EF_void_UART_PutChar(temp_L);           // Display the number
+}
+
 

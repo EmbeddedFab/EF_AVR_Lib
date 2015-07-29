@@ -32,7 +32,7 @@
 
 
 /*********************************************************************
-* Function    : void EF_SpiInit(U8_t DeviceType);
+* Function    : void EF_void_SPI_Init(U8_t DeviceType);
 *
 * DESCRIPTION : This function used to Initialize SPI Module.
 *
@@ -41,22 +41,25 @@
 * Return Value: void
 **********************************************************************/
 void EF_SpiInit(U8_t DeviceType)
-{	
-    SPCR = (1 << SPE)|(1 << DORD)|(1 << SPR1)|(1 << SPR0);
+{
 	if(MASTER_TYPE == DeviceType)
 	{
-        SPCR |= (1 << MSTR);   /* Set the device as Master */
         /* make (MOSI) PB5 & (SCK)PB7 & (SS)PB4 : output */
         SPI_DDR |= (1<<MOSI_BIT) | (1<<SS_BIT) | (1<<SCK_BIT);
+        SPI_DDR &= ~(1<<MISO_BIT);
+
+        SPCR |= (1 << MSTR);   /* Set the device as Master */
+
 	}
 	else
 	{
 		SPI_DDR |= (1<<MISO_BIT);		   /* Slave , make (MISO) PB6 : output */
 	}
 
+    SPCR |= (1 << SPE)|(0 << DORD)|(1 << SPR1)|(1 << SPR0);
+
 	/* using Special Timer to able some UART Function to be unstuck */
 	EF_void_TimerCreate(SPI_TIMER_ID, SPI_TIMEOUT);
-
 }
 
 
@@ -75,7 +78,33 @@ U8_t EF_SpiTransfer(U8_t data)
 	SPDR = data;
 	while (!( SPSR & (1<<SPIF)))   /* Wait for empty transmit buffer */
 	{};
+
 	return SPDR;                     /* Put data into buffer, sends the data */
+}
+
+/*********************************************************************
+* Function    : U8_t EF_void_SPI_TransferArray(U8_t data);
+*
+* DESCRIPTION : This function used to Transfer Data array through SPI bus
+*
+* PARAMETERS  : DataOut  pointer to Data user need to transmit.
+* 				DataIn   pointer to received Data during transmitting
+* 				Data_Length
+*
+*
+* Return Value: Data User received
+**********************************************************************/
+void EF_void_SPI_TransferArray(U8_t * DataOut, U8_t * DataIn, U8_t Data_Length)
+{
+	U8_t counter = 0;
+	for (counter =0; counter<Data_Length; counter++)
+	{
+		SPDR = DataOut[counter];
+		while (!( SPSR & (1<<SPIF)))   /* Wait for empty transmit buffer */
+		{};
+		DataIn[counter] = SPDR;
+	}
+
 }
 
 /*********************************************************************

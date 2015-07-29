@@ -103,4 +103,6 @@ extern void EF_void_UART_PutChar(U8_t data);
 void EF_void_UART_SendArray(U8_t *array, U8_t Length);
 
 
+void EF_void_UART_HextoASCII(U8_t *hex);
+
 #endif

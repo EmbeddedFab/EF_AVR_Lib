@@ -11,7 +11,8 @@ C_SRCS += \
 ../HAL/EF_LCD.c \
 ../HAL/EF_SkyLabGPS.c \
 ../HAL/EF_UltraSonic.c \
-../HAL/EF_Wavecom.c 
+../HAL/EF_Wavecom.c \
+../HAL/EF_nRF2401.c 
 
 OBJS += \
 ./HAL/EF_7Segment.o \
@@ -21,7 +22,8 @@ OBJS += \
 ./HAL/EF_LCD.o \
 ./HAL/EF_SkyLabGPS.o \
 ./HAL/EF_UltraSonic.o \
-./HAL/EF_Wavecom.o 
+./HAL/EF_Wavecom.o \
+./HAL/EF_nRF2401.o 
 
 C_DEPS += \
 ./HAL/EF_7Segment.d \
@@ -31,7 +33,8 @@ C_DEPS += \
 ./HAL/EF_LCD.d \
 ./HAL/EF_SkyLabGPS.d \
 ./HAL/EF_UltraSonic.d \
-./HAL/EF_Wavecom.d 
+./HAL/EF_Wavecom.d \
+./HAL/EF_nRF2401.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
