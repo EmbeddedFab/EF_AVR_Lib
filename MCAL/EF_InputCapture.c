@@ -86,7 +86,7 @@
  * 				 TimeOut  : time of waiting the pulse. for example for 100 msec
  * 				 			put 100. TimeOut is Multipliers of 20 ms
  *
- * Return Value: indicate the status: FAILURE to get pulse or SUCESS
+ * Return Value: indicate the status: FAILURE to get pulse or SUCCESS
  *
  * NOTE        : 1-returned pulse is number of clock cycles ,to convert it
  * 				   to time using Time_pulse = pulse*(1/(F_CPU/prescaler))
@@ -97,7 +97,7 @@
 	/* to save the first edge time in it */
 	U16_t Pulse_FirstEdge = 0;
 	/* Status flag helps in return */
-	BOOLEAN GetPulseFlag = SUCESS;
+	BOOLEAN GetPulseFlag = SUCCESS;
 
 	 /* select edge (rising) and prescaler */
 	TCCR1B = (1<<INPUT_CAPTURE_EDGE_SELECT)|(PRESCALER_VALUE);
@@ -118,8 +118,10 @@
 	/* stop the Input Capture timer */
 	EF_void_TimerStop(INPUT_CAPTURE_ID);
 	EF_void_TimerReset(INPUT_CAPTURE_ID);
+
 	/* get the time of first edge */
 	Pulse_FirstEdge = ICR1;
+
 	/* clear flag by write one in it */
 	TIFR |= 1<<ICF1;
 
@@ -127,7 +129,7 @@
 	 * to get the pulse,get the time of second edge and subtract it from the first edge
 	 * but check first for getting the first edge correctly
 	 * * */
-	if (GetPulseFlag == SUCESS)
+	if (GetPulseFlag == SUCCESS)
 	{
 		 /* convert the edge (falling ) and prescaler */
 		TCCR1B = (0<<INPUT_CAPTURE_EDGE_SELECT)|(PRESCALER_VALUE);
@@ -167,7 +169,7 @@
  * 				 TimeOut  : time of waiting the period. for example for 2000 msec
  * 				 			put 2000. TimeOut is Multipliers of 20 ms
  *
- * Return Value: indicate the status: FAILURE to get period or SUCESS
+ * Return Value: indicate the status: FAILURE to get period or SUCCESS
  *
  *  * NOTE        : 1-returned pulse is number of clock cycles ,to convert it
  * 				      to time using Time_pulse = pulse*(1/(F_CPU/prescaler))
@@ -179,7 +181,7 @@
 	 /* to save the first edge time in it */
 	U16_t Period_FirstEdge = 0;
 	/* Status flag helps in return */
-	BOOLEAN GetPeriodFlag = SUCESS;
+	BOOLEAN GetPeriodFlag = SUCCESS;
 
 	 /* select edge (rising) and prescaler */
 	TCCR1B = (1<<INPUT_CAPTURE_EDGE_SELECT)|(PRESCALER_VALUE);
@@ -209,7 +211,7 @@
 	 * to get the period, waiting the next rising edge and then subtract
 	 * the second time from the first one to get the time period
 	 * * */
-	if (GetPeriodFlag == SUCESS)
+	if (GetPeriodFlag == SUCCESS)
 	{
 
 		/* using Special Timer to be unstuck */

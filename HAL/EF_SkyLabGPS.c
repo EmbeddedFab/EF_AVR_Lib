@@ -226,9 +226,9 @@ BOOLEAN EF_B_SkyLabGPS_GetPosition( double* D_LatitudePtr, double* D_LongitudePt
 	    		if (RxBuffer[VAILD_ELEMENT] != 'A')
 	    		{
 #ifdef TIVAC
-	    			UARTprintf("not valid data \n");
+	    			UARTprintf((U8_t*)"not valid data \n");
 #else
-	    			EF_void_LCD_print ("not valid data");
+	    			EF_void_LCD_print ((U8_t*)"not valid data");
 #endif
 					return DATA_NOT_VAILD;
 				}
@@ -321,7 +321,7 @@ BOOLEAN EF_B_SkyLabGPS_PrintPosition( double D_Latitude, double D_longitude)
 	{
 		EF_void_LCD_send_data ('0');
 	}
-	EF_void_LCD_print( (char*) AsciiArray);
+	EF_void_LCD_print( (U8_t*) AsciiArray);
 	EF_void_LCD_send_data (',');
 	EF_void_LCD_send_data (RxBuffer[NORTH_OR_SOUTH]);
 #endif
@@ -329,7 +329,7 @@ BOOLEAN EF_B_SkyLabGPS_PrintPosition( double D_Latitude, double D_longitude)
 #ifdef TIVAC
 	UARTprintf("longitude: %d.", (U16_t) D_longitude);
 	#else
-	itoa((U16_t) D_longitude,  (char*) AsciiArray, 10);
+	itoa((int) D_longitude,  (char*) AsciiArray, 10);
 	EF_void_LCD_print_NUM( (U16_t) D_longitude ,2);
 	EF_void_LCD_send_data('.');
 	#endif
@@ -337,7 +337,7 @@ BOOLEAN EF_B_SkyLabGPS_PrintPosition( double D_Latitude, double D_longitude)
 #ifdef TIVAC
 	UARTprintf("%06d , %c\n", AfterPoint, RxBuffer[WEST_OR_EAST]);
 #else
-	itoa((U16_t) AfterPoint,  (char*) AsciiArray, 10);
+	itoa((int) AfterPoint,  (char*) AsciiArray, 10);
 	NumOfDigit=0;
 	while (AfterPoint > 0)
 	{
@@ -348,7 +348,7 @@ BOOLEAN EF_B_SkyLabGPS_PrintPosition( double D_Latitude, double D_longitude)
 	{
 		EF_void_LCD_send_data ('0');
 	}
-	EF_void_LCD_print( (char*) AsciiArray);
+	EF_void_LCD_print( (U8_t*) AsciiArray);
 	EF_void_LCD_send_data (',');
 	EF_void_LCD_send_data (RxBuffer[WEST_OR_EAST]);
 #endif

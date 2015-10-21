@@ -73,7 +73,7 @@
 #define TIMER_PRESCALE		1024
 #endif
 
-
+/*   Timer_Counts = ( F_timer/(F_required) ) - 1 = ( F_timer * T_required ) - 1 */
 #define CYCLES_PER_US       ((F_CPU/ TIMER_PRESCALE )/1000000 ) 		/* system tick is 1 micro */
 #define CYCLES_PER_5_MLI_S  ((F_CPU/ TIMER_PRESCALE )/200) 				/* system tick is 5 ms    */
 #define CYCLES_PER_10_MLI_S ((F_CPU/ TIMER_PRESCALE )/100) 				/* system tick is 10 ms   */

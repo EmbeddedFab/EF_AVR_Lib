@@ -67,6 +67,8 @@ extern BOOLEAN EF_BOOLEAN_UART_PutChar(U8_t data);
 ******************************************************************************/
 extern BOOLEAN EF_BOOLEAN_UART_GetChar(U8_t * returnedValue);
 
+
+extern BOOLEAN EF_BOOLEAN_UART_CheckForRxData( );
 /****************************************************************************
 * Function    : EF_u8_UART_WaitChar
 *

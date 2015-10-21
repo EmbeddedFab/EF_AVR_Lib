@@ -57,6 +57,7 @@ void EF_void_KeyPad_Init (void)
 {
     /* make 3 pins output (COLOUMNS) and anther 3 inputs (ROWS) with pull-up
      * normally, input is high. */
+	/* TODO : don't use this function as it effects on all pins */
 	EF_S8_DIO_InitPort (KEYBAD_PORT, 0xE0);           /* Init Port A "Keypad"*/
 	EF_S8_DIO_SetPin   (KEYBAD_PORT, FIRST_ROW_PIN);  /* Enable Internal PullUp Resistor */
 	EF_S8_DIO_SetPin   (KEYBAD_PORT, SECOND_ROW_PIN);

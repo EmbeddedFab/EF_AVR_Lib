@@ -50,13 +50,14 @@ void LCD_update_time(U8_t hours, U8_t minutes, U8_t seconds);
 S8_t temp[2] , string[5];
 U8_t u8Counter = 0, Hours, Mintes , Seconds;
 U16_t u16DigitalValue =0 ;
+U8_t customArray[] = {0x4, 0x1f, 0x11, 0x11, 0x11, 0x1f, 0x1f, 0x1f};
 int main (void)
  {
 
 
 
 	 U16_t Period;
-	DDRD = 0x00;
+//	DDRD |= 1<<7;
 	PORTD = 0x00;
 
 	EF_void_TimerInit();
@@ -64,29 +65,29 @@ int main (void)
 	EF_void_LCD_Clear_Screen();
 	EF_void_LCD_goto(1, 2);
 //		_delay_ms(1000);
-		EF_void_LCD_print(" EmbeddedFab");
+//		EF_void_LCD_print(" EmbeddedFab");
 		_delay_ms(1000);
 
 //	GICR  = (1<<INT0);					// Enable INT0
 //	MCUCR = (1 << ISC00) | (1 << ISC01);
 	sei();
-	EF_void_PWM_init(TIMER_0);
-	EF_void_InputCapture_Init();
-	EF_void_PWM_SetDutyCycle (90 ,TIMER_0);
-	u8Counter = EF_BOOLEAN_InputCapture_GetPeriod (&Period, 100);
-	EF_void_LCD_Clear_Screen();
-	EF_void_LCD_goto(1, 2);
-	EF_void_LCD_print_NUM( Period, 2);
-	EF_void_LCD_print_NUM( u8Counter, 1);
+//	EF_void_PWM_init(TIMER_0);
+//	EF_void_InputCapture_Init();
+//	EF_void_PWM_SetDutyCycle (50 ,TIMER_0);
+//	u8Counter = EF_BOOLEAN_InputCapture_GetPeriod (&Period, 100);
+//	EF_void_LCD_Clear_Screen();
+//	EF_void_LCD_goto(1, 2);
+//	EF_void_LCD_print_NUM( Period, 2);
+//	EF_void_LCD_print_NUM( u8Counter, 1);
 
 	while(1)
 	{
-		PORTD &= ~(1 << 7);
+//		PORTD ^= (1 << 7);
 
 //		_delay_ms(100);
-
-		PORTD |= 1 << 7;
-		_delay_ms(50);
+		EF_void_uploadCustomChar(0 , customArray);
+//		PORTD |= 1 << 7;
+		_delay_ms(500);
 
 
 	}
@@ -310,7 +311,7 @@ int main (void)
 			_delay_ms (20);
 		}
 #endif
-#if 1
+#if KEYPAD_ENABLE
 		number = EF_u8_KeyPad_Scan();
 		if(number != 0)
 		{
@@ -337,23 +338,23 @@ void LCD_update_time(U8_t hours, U8_t minutes, U8_t seconds)
 
 	EF_void_LCD_goto(2,6);
 
-	itoa(hours/10,temp,10);
-	EF_void_LCD_print(temp);
-	itoa(hours%10,temp,10);
-	EF_void_LCD_print(temp);
+	itoa( (int) hours/10,temp,10);
+	EF_void_LCD_print( (U8_t*) temp);
+	itoa( (int) hours%10,temp,10);
+	EF_void_LCD_print( (U8_t*)temp);
 
 
 	EF_void_LCD_goto(2,9);
-	itoa(minutes/10,temp,10);
-	EF_void_LCD_print(temp);
-	itoa((minutes%10),temp,10);
-	EF_void_LCD_print(temp);
+	itoa( (int) minutes/10,temp,10);
+	EF_void_LCD_print( (U8_t*) temp);
+	itoa( (int) (minutes%10),temp,10);
+	EF_void_LCD_print( (U8_t*) temp);
 
 	EF_void_LCD_goto(2,12);
-	itoa(seconds/10,temp,10);
-	EF_void_LCD_print(temp);
-	itoa(seconds%10,temp,10);
-	EF_void_LCD_print(temp);
+	itoa( (int) seconds/10,temp,10);
+	EF_void_LCD_print( (U8_t*) temp);
+	itoa( (int) seconds%10,temp,10);
+	EF_void_LCD_print( (U8_t*) temp);
 }
 
 #ifdef WAVECOM

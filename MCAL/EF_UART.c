@@ -123,6 +123,14 @@ BOOLEAN EF_BOOLEAN_UART_GetChar(U8_t * returnedValue)
     *returnedValue = *uart_reg.UDR_Reg;
     return reciveFlag;
 }
+
+
+BOOLEAN EF_BOOLEAN_UART_CheckForRxData( )
+{
+    /*Returns true if there is data in the receive FIFO or false if there is no data in the receive FIFO.*/
+    return ( (*uart_reg.UCSRA_Reg & (1 << RXC)) >> RXC );
+}
+
 /****************************************************************************
 * Function    : EF_BOOLEAN_UART_PutChar
 *

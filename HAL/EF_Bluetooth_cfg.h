@@ -1,7 +1,7 @@
 /***************************************************************
- *  Source File: std_types.h
+ *  Source File: EF_ESP8266_cfg.h
  *
- *  Description: standard data types
+ *  Description: ESP8266 wifi driver
  *
  *  History:     Version 1.0  - INIT Version
  *  Date   :     25/08/2014
@@ -9,7 +9,7 @@
  *  Author :     EmbeddedFab.
  *
  *  Copyright (C) <2014>  <EmbeddedFab>
- 
+
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -22,45 +22,25 @@
 
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- 
+
  **************************************************************/
+#ifndef _EF_BLUETOOTH_CFG_H_
+#define _EF_BLUETOOTH_CFG_H_
+
+/* ------------------------- Definitions ----------------------*/
+/* connect pin 34 in module to 3.3v to Enable all AT Command
+ * if Connection is Success , then connect it to zero to Communication mode */
+#define BLUETOOTH_UART_NUMBER       UART7
+#define ENABLE_AT_COMMAND_PORT      'f'
+#define ENABLE_AT_COMMAND_PIN        3
+
+#define MAX_DIGIT_FOR_ITOA          4         /* to define the max. number of Digit using in itoa function, until now using in SMS read and BaudRate */
+#define SIZE_OF_RETURNED_ARRAY      100       /* Max size of returned Array (RX UART Buffer) */
+#define CONNECTED_STATUS             7
+
+#define MASTER_MODE                  1
+#define SLAVE_MODE                   0
 
 
-#ifndef STD_TYPES_H
-#define STD_TYPES_H
 
-typedef unsigned char BOOLEAN;
-
-typedef unsigned char U8_t;
-typedef char S8_t;
-
-typedef unsigned int U16_t;
-typedef signed int S16_t;
-
-typedef unsigned long U32_t;
-typedef signed long S32_t;
-
-typedef float FP32;
-typedef double FP64;
-
-typedef int MAINRETURN_t;
-
-#define BYTE S8_t
-#define UBYTE U8_t
-
-#define WORD S16_t
-#define UWORD U16_t
-
-#define LONG S32_t
-#define ULONG U32_t
-
-#define TRUE 1
-#define FALSE 0
-
-#define FAILURE  0
-#define SUCCESS   1
-
-//#ifndef NULL
-#define NULL 0
-//#endif
 #endif

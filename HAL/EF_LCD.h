@@ -70,7 +70,7 @@ void EF_void_LCD_send_command(U8_t cmnd);
 *
 * Return Value: Void.
 ***********************************************************************/
-void EF_void_LCD_send_data(char data);
+void EF_void_LCD_send_data(U8_t data);
 
 
 /***********************************************************************
@@ -96,7 +96,7 @@ void EF_void_LCD_goto(U8_t y, U8_t x);
 *
 * Return Value: Void.
 ***********************************************************************/
-void EF_void_LCD_print(char *string);
+void EF_void_LCD_print(unsigned char *string);
 
 /***********************************************************************
 * Function    : void EF_void_LCD_print_ByLength

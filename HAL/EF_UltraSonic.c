@@ -195,7 +195,7 @@ ISR (INT1_vect)
 		EF_void_LCD_Clear_Screen();
 		itoa(PulseDistance_Cm, string1, 10);
 		EF_void_LCD_goto(1, 2);
-		EF_void_LCD_print(string1);
+		EF_void_LCD_print( (U8_t *)string1);
 
 		Rising_flag = 1;						 /* to enter the "if" condition, if trigger to UltraSonic is happened */
 		GIFR |= 1 << INTF1;						 /* make flag = 0 */

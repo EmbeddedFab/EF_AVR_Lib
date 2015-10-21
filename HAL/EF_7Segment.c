@@ -44,6 +44,8 @@
 ***********************************************************************/
 void EF_void_Segment_Init (void)
 {
+	/* TODO : don't use this function as it effects on all pins */
+
 	/* used 4 bit for data instead of 7 */
 	EF_S8_DIO_InitPort (SEGMENT_DATA_PORT   , 0x0F);
 	/* used 4 bit for control the four 7Segemnts */

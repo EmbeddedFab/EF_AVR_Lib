@@ -5,8 +5,10 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
 ../HAL/EF_7Segment.c \
+../HAL/EF_Bluetooth.c \
 ../HAL/EF_DS1307.c \
 ../HAL/EF_E2PROM_24C16.c \
+../HAL/EF_ESP8266.c \
 ../HAL/EF_Keypad.c \
 ../HAL/EF_LCD.c \
 ../HAL/EF_SkyLabGPS.c \
@@ -16,8 +18,10 @@ C_SRCS += \
 
 OBJS += \
 ./HAL/EF_7Segment.o \
+./HAL/EF_Bluetooth.o \
 ./HAL/EF_DS1307.o \
 ./HAL/EF_E2PROM_24C16.o \
+./HAL/EF_ESP8266.o \
 ./HAL/EF_Keypad.o \
 ./HAL/EF_LCD.o \
 ./HAL/EF_SkyLabGPS.o \
@@ -27,8 +31,10 @@ OBJS += \
 
 C_DEPS += \
 ./HAL/EF_7Segment.d \
+./HAL/EF_Bluetooth.d \
 ./HAL/EF_DS1307.d \
 ./HAL/EF_E2PROM_24C16.d \
+./HAL/EF_ESP8266.d \
 ./HAL/EF_Keypad.d \
 ./HAL/EF_LCD.d \
 ./HAL/EF_SkyLabGPS.d \

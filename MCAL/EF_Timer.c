@@ -49,7 +49,7 @@ void EF_void_Timer_PORTinit(void)
 {
 	
 	/* initialize timer 1 , set the prescaler */
-	TIMER_CONTROL_REG = (TIMER_CONTROL_REG & ~ TIMER_PRESCALE_MASK) |TIMER1PRESCALE;
+	TIMER_CONTROL_REG = (TIMER_CONTROL_REG & ~ TIMER_PRESCALE_MASK) | TIMER1PRESCALE ;
 	/* reset TCNT1 */
 	TIMER_REG = MAX_U8_t - (U8_t)TIMERCYCLES ;
 	/* enable TCNT1 overflow */

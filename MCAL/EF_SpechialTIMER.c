@@ -126,9 +126,9 @@ void EF_void_TimerCreate(U8_t timerNumber , U16_t timerTimeout) /* Timer timeout
 ******************************************************************************/
 void EF_void_TimersUpdate(void)
 {
-	U16_t timersCounter=0;
+	U16_t timersCounter = 0;
 
-	for( timersCounter=0 ; timersCounter<MAX_NUMBER_OF_TIMERS ; timersCounter++ )
+	for( timersCounter = 0 ; timersCounter < MAX_NUMBER_OF_TIMERS ; timersCounter++ )
 	{
 		if(timers_list[timersCounter].isEnables == TRUE)
 		{

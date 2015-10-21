@@ -29,12 +29,11 @@
  *
  **************************************************************/
 
-#include <string.h>
+#include <stdlib.h>
 #include "EF_LCD.h"
 #include "../MCAL/EF_DIO.h"
 #include <avr/io.h>
 #include <util/delay.h>
-#include <stdlib.h>
 /**************************************************************
  * Definitions
  **************************************************************/
@@ -113,9 +112,11 @@ void EF_void_LCD_send_command(U8_t cmnd)
 	/*RS and RW will be LOW */
 	LCD_CNTRL_PORT &= ~(1<<LCD_RW_PIN);
 	LCD_CNTRL_PORT &= ~(1<<LCD_RS_PIN);
-	/* output high nibble first , "Generic method", attach data by bit
-	 * first: put 0 in each pin then if the corresponding bit =1 , put 1*/
-	/* output high nibble first */
+	/*
+	 * output high nibble first , "Generic method", attach data by bit
+	 * first: put 0 in each pin then if the corresponding bit =1 , put 1
+	 * -------- output high nibble first ---------*
+	 * * */
 	LCD_DATA3_PORT &= ~_BV(LCD_DATA3_PIN);
 	LCD_DATA2_PORT &= ~_BV(LCD_DATA2_PIN);
 	LCD_DATA1_PORT &= ~_BV(LCD_DATA1_PIN);
@@ -139,9 +140,12 @@ void EF_void_LCD_send_command(U8_t cmnd)
 	if(cmnd & 0x04) LCD_DATA2_PORT |= _BV(LCD_DATA2_PIN);
 	if(cmnd & 0x02) LCD_DATA1_PORT |= _BV(LCD_DATA1_PIN);
 	if(cmnd & 0x01) LCD_DATA0_PORT |= _BV(LCD_DATA0_PIN);
+
+	/* make Enable High to low with delay to enable the internal latch at the LCD*/
 	LCD_CNTRL_PORT |= (1<<LCD_ENABLE_PIN);
 	_delay_us(2);
 	LCD_CNTRL_PORT &= ~(1<<LCD_ENABLE_PIN);
+
 	/* wait to let LCD running the command*/
 	_delay_us(300);
 }
@@ -155,14 +159,16 @@ void EF_void_LCD_send_command(U8_t cmnd)
  *
  * Return Value: Void.
  ***********************************************************************/
-void EF_void_LCD_send_data(char data)
+void EF_void_LCD_send_data(U8_t data)
 {
 	/*RS will be high and RW will be LOW */
 	LCD_CNTRL_PORT &= ~(1<<LCD_RW_PIN);
 	LCD_CNTRL_PORT |= (1<<LCD_RS_PIN);
-	/* output high nibble first , "Generic method", attach data by bit
-	 * first: put 0 in each pin then if the corresponding bit =1 , put 1*/
-	/* output high nibble first */
+	/*
+	 * output high nibble first , "Generic method", attach data by bit
+	 * first: put 0 in each pin then if the corresponding bit =1 , put 1
+	 * -----------output high nibble first--------*
+	 * * */
 	LCD_DATA3_PORT &= ~_BV(LCD_DATA3_PIN);
 	LCD_DATA2_PORT &= ~_BV(LCD_DATA2_PIN);
 	LCD_DATA1_PORT &= ~_BV(LCD_DATA1_PIN);
@@ -187,10 +193,11 @@ void EF_void_LCD_send_data(char data)
 	if(data & 0x02) LCD_DATA1_PORT |= _BV(LCD_DATA1_PIN);
 	if(data & 0x01) LCD_DATA0_PORT |= _BV(LCD_DATA0_PIN);
 
-	/* make Enable High to low with delay to enable the internal latch at the LCD*/
+	/* make Enable High to low with delay to enable the internal latch at the LCD */
 	LCD_CNTRL_PORT |= (1<<LCD_ENABLE_PIN);
 	_delay_us(2);
 	LCD_CNTRL_PORT &= ~(1<<LCD_ENABLE_PIN);
+
 	/* wait to let LCD running the command*/
 	_delay_us(300);
 }
@@ -228,9 +235,9 @@ void EF_void_LCD_goto(U8_t y, U8_t x)
 void EF_void_LCD_print_NUM(S16_t s16Numberstring,U8_t u8RowNumber)
 {
 	U8_t ArrayIndex = 0;
-	char s8DisplayStr[6] = {0};
+	U8_t s8DisplayStr[6] = {0};
 	/* convert number to ASCII */
-	itoa(s16Numberstring, s8DisplayStr, 10);
+	itoa( (int )s16Numberstring,  (char*)s8DisplayStr, 10);
 	for(ArrayIndex = 0; s8DisplayStr[ArrayIndex] != 0; ArrayIndex++)
 	{
 		EF_void_LCD_goto(u8RowNumber, (ArrayIndex + 1));
@@ -248,7 +255,7 @@ void EF_void_LCD_print_NUM(S16_t s16Numberstring,U8_t u8RowNumber)
 *
 * Return Value: Void.
 ***********************************************************************/
-void EF_void_LCD_print(char *string)
+void EF_void_LCD_print(unsigned char *string)
 {
 	U8_t i = 0;
 
@@ -303,7 +310,10 @@ void EF_void_LCD_Clear_Screen(void)
 * DESCRIPTION : This function used to upload a custom char which user wants to map
 * 				it using CGRAM (Character Generator Ram Address set).
 *
-* PARAMETERS  : location : to define which CGRAM ADD offset. It takes from (0 to 7).
+* PARAMETERS  : location : to define which CGRAM ADD offset. It takes from (0 to 7)
+* 						   as CGRAM has 64bytes and LCD as 5x8 dots in function set then you
+* 						   can define a total of 8 user defined patterns (1 Byte for each row
+* 						   and 8 rows for each pattern).
 * 				character: pointer to 8 pointer to char as CGRAM needs 8 char to map
 *
 * Return Value: Void.
