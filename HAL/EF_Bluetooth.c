@@ -914,7 +914,7 @@ U8_t EF_u8_Bluetooth_GetModuleStatus ( U8_t* Status )
 /*********************************************************************
 * Function    : EF_BOOLEAN_Bluetooth_SendData (U8_t* Data, U8_t DataLength );
 *
-* DESCRIPTION : This function used to
+* DESCRIPTION : This function used to send data
 *
 * PARAMETERS  : Data : pointer to send data
 *               DataLength : number of characters
@@ -957,7 +957,7 @@ BOOLEAN EF_BOOLEAN_Bluetooth_SendData (U8_t* Data, U8_t DataLength )
 /*********************************************************************
 * Function    : EF_BOOLEAN_Bluetooth_GetDataIfExist ( U8_t* RxData_ptr );
 *
-* DESCRIPTION : This function used to
+* DESCRIPTION : This function used to receive data if exist
 *
 * PARAMETERS  : RxData_ptr: pointer to returned data.
 *
